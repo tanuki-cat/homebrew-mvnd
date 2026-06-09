@@ -5,7 +5,7 @@ This is a homebrew tap for https://github.com/apache/maven-mvnd[`mvnd`, the Mave
 Tap and install with
 
 ```
-brew install mvndaemon/homebrew-mvnd/mvnd
+brew install tanuki-cat/mvnd/mvnd
 ```
 
 Afterwards, `mvnd` is available on the path and you can build your Maven based Java programs like this:
@@ -13,3 +13,28 @@ Afterwards, `mvnd` is available on the path and you can build your Maven based J
 ```
 mvnd clean verify
 ```
+
+== Updating
+
+Refresh the tap and upgrade to the latest released version:
+
+```
+brew update
+brew upgrade tanuki-cat/mvnd/mvnd
+```
+
+Check the installed version with:
+
+```
+mvnd --version
+```
+
+== Auto-update
+
+The formula is kept in sync with upstream by the
+`.github/workflows/auto-update.yaml` workflow. It runs daily (and can be
+triggered manually from the Actions tab), checks
+https://github.com/apache/maven-mvnd[apache/maven-mvnd] for the latest *stable*
+release, and, when a newer version is available, opens a pull request that bumps
+`Formula/mvnd.rb` (version + `sha256` for macOS amd64/aarch64 and Linux amd64).
+Merging the PR publishes the new version to the tap.
