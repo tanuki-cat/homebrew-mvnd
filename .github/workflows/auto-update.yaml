@@ -77,3 +77,23 @@ jobs:
           - Checksums fetched from https://downloads.apache.org/maven/mvnd/${{ steps.latest.outputs.latest }}/
 
           Please verify the version and checksums before merging."
+
+          # Close superseded auto-update PRs from older versions and delete
+          # their remote branches.
+          gh pr list --state open --json number,headRefName \
+            --jq ".[] | select(.headRefName | startswith(\"auto-update/mvnd-\")) | select(.headRefName != \"$branch\") | .number" \
+          | while read -r num; do
+              [ -n "$num" ] || continue
+              echo "Closing superseded PR #$num"
+              gh pr close "$num" --delete-branch \
+                --comment "Superseded by the PR for mvnd ${{ steps.latest.outputs.latest }}."
+            done
+
+          # Sweep any leftover auto-update/* branches that have no open PR.
+          git ls-remote --heads origin 'auto-update/mvnd-*' \
+            | sed 's#.*refs/heads/##' \
+            | while read -r b; do
+                [ "$b" = "$branch" ] && continue
+                echo "Deleting stale branch $b"
+                git push origin --delete "$b" || true
+              done
