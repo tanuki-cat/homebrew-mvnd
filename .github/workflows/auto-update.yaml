@@ -5,7 +5,7 @@ name: Auto-update mvnd formula
 # so a daily schedule (plus manual dispatch) is used.
 on:
   schedule:
-    - cron: '0 6 * * *'   # daily at 06:00 UTC
+    - cron: '7 1 * * *'   # daily at 01:07 UTC = 09:07 China time (UTC+8)
   workflow_dispatch:
 
 permissions:
